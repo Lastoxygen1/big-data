@@ -2,3 +2,6 @@
 /crudservice/__pycache__
 /db/db_data
 /reportservice/env
+/minio/.minio.sys
+/minio/main
+/locust/env
