@@ -10,4 +10,16 @@ services:
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: rootroot
-      POSTGRES_DB: root
+      POSTGRES_DB: library
+  
+  app:
+    image: library-app:latest
+    build: 
+      context: ./crudservice
+      dockerfile: Dockerfile
+    restart: always
+    container_name: library-app
+    ports:
+      - "8080:8080" #op
+    depends_on:
+      - db
