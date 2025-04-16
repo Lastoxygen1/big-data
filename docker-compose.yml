@@ -4,22 +4,34 @@ services:
     restart: always
     container_name: db
     ports:
-      - "5432:5432" #op
+      - "9020:5432" #op
     volumes:
       - ./db/db_data:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: root
+      POSTGRES_USER: rootusers
       POSTGRES_PASSWORD: rootroot
       POSTGRES_DB: library
   
-  app:
-    image: library-app:latest
+  crudservice:
+    image: crudservice:latest
     build: 
       context: ./crudservice
       dockerfile: Dockerfile
     restart: always
-    container_name: library-app
+    container_name: crudservice
     ports:
-      - "8080:8080" #op
+      - "3000:8000" #op
     depends_on:
       - db
+
+  reportservice:
+    image: reportservice:latest
+    build: 
+      context: ./reportservice
+      dockerfile: Dockerfile
+    restart: always
+    container_name: reportservice
+    ports:
+      - "3001:8000" #op
+    depends_on:
+      - crudservice

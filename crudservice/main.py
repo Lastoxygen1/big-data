@@ -7,11 +7,15 @@ from uuid import UUID
 
 app = FastAPI()
 
+REPOERT_SERVICE_URL = "http://reportservice:8000"
+
 # Lifespan event handler
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Initialize the database on startup
-    init_db()
+    from models import Reader
+    from base import BASE, engine
+    BASE.metadata.create_all(bind=engine)
     yield
     # Clean up resources on shutdown (if needed)
     print("Shutting down...")
@@ -53,14 +57,13 @@ def delete_reader(reader_id: UUID, session: Session = Depends(get_session)):
     session.commit()
     return {"message": "Reader deleted"}
 
-@app.get("/report", response_model=dict)
+import requests
+@app.get("/reports/report")
 def get_report(session: Session = Depends(get_session)):
-    total_readers = session.query(Reader).count()
-    readers_with_books = session.query(Reader).filter(Reader.has_books == True).count()
-    return {
-        "total_readers": total_readers,
-        "readers_with_books": readers_with_books
-    }
+    report = requests.get(REPOERT_SERVICE_URL + "/report").json()
+    print(report)
+    return report
+    
 
 if __name__ == "__main__":
     import uvicorn
