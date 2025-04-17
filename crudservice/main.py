@@ -84,7 +84,7 @@ def delete_reader(reader_id: UUID, session: Session = Depends(get_session)):
 
 @app.get("/reports/report")
 def get_report(session: Session = Depends(get_session)):
-    report = requests.get(REPOERT_SERVICE_URL + "/report").json()
+    report = requests.get(REPOERT_SERVICE_URL + "/report/file").json()
     print(report)
     return report
 
