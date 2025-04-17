@@ -8,7 +8,6 @@ from uuid import UUID
 import requests
 import boto3
 
-app = FastAPI()
 
 REPOERT_SERVICE_URL = "http://reportservice:8000"
 
@@ -41,6 +40,10 @@ async def lifespan(app: FastAPI):
     yield
     # Clean up resources on shutdown (if needed)
     print("Shutting down...")
+
+
+app = FastAPI(lifespan=lifespan)
+
 @app.get("/", response_model=list[Reader])
 def get_readers(session: Session = Depends(get_session)):
     return session.query(Reader).all()
