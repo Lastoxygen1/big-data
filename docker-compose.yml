@@ -31,8 +31,8 @@ services:
       dockerfile: Dockerfile
     restart: always
     container_name: reportservice
-    ports:
-      - "3001:8000" #op
+    #ports:
+    #  - "3001:8000" op
     depends_on:
       - crudservice
 
