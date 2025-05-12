@@ -38,6 +38,11 @@ def generate_report():
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.get("/rep")
+def get_report_pathers():
+    return get_report_data()
+
+
 import json
 @app.get("/report/file")
 def get_report_file():
