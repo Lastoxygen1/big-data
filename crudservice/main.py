@@ -93,6 +93,17 @@ def get_report(report_id: str, session: Session = Depends(get_session)):
     s3_client.download_file(bucket_name, f"{report_id}", f"{report_id}")
     return FileResponse(f"{report_id}")
 
+import pydantic
+
+class PathData(pydantic.BaseModel):
+    path: str
+
+@app.post("/reports_by_path/")
+def proxy_reports(request: Request, pathData: PathData):
+    report_service_endpoint = REPOERT_SERVICE_URL + f"/{pathData.path}"
+    response = requests.get(report_service_endpoint)
+    return response.json()
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
